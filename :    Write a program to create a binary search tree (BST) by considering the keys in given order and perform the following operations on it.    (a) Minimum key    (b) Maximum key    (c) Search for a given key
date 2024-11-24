@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <stdlib.h>
+// Node structure for BST
+struct Node {
+    int key;
+    struct Node* left;
+    struct Node* right;
+};
+// Function to create a new node
+struct Node* createNode(int key) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->key = key;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+// Function to insert a key into the BST
+struct Node* insert(struct Node* root, int key) {
+    if (root == NULL) return createNode(key);
+    if (key < root->key) root->left = insert(root->left, key);
+    else if (key > root->key) root->right = insert(root->right, key);
+    return root;
+}
+// Function to find the minimum key in the BST
+int findMin(struct Node* root) {
+    while (root->left) root = root->left;
+    return root->key;
+}
+// Function to find the maximum key in the BST
+int findMax(struct Node* root) {
+    while (root->right) root = root->right;
+    return root->key;
+}
+// Function to search for a key in the BST
+int search(struct Node* root, int key) {
+    if (root == NULL) return 0;
+    if (root->key == key) return 1;
+    if (key < root->key) return search(root->left, key);
+    return search(root->right, key);
+}
+int main() {
+    struct Node* root = NULL;
+    int keys[] = {50, 30, 70, 20, 40, 60, 80};
+    int n = sizeof(keys) / sizeof(keys[0]);
+
+    // Insert keys into the BST
+    for (int i = 0; i < n; i++) root = insert(root, keys[i]);
+    // Perform operations
+    printf("Minimum key: %d\n", findMin(root));
+    printf("Maximum key: %d\n", findMax(root));
+    int searchKey = 40;
+    if (search(root, searchKey))
+        printf("Key %d is found in the BST.\n", searchKey);
+    else
+        printf("Key %d is not found in the BST.\n", searchKey);
+    return 0;
+}
